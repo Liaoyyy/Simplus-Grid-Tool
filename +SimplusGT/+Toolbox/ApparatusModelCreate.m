@@ -68,8 +68,11 @@ switch floor(Type/10)
                    
     % ### Grid-forming inverter
     case 2  % Type 20-29
-        %Apparatus = SimplusGT.Class.GridFormingVSI('ApparatusType',Type);
-        Apparatus = SimplusGT.Class.GridFormingVSI_PCS('ApparatusType',Type);
+        if Type == 21
+            Apparatus = SimplusGT.Class.GridFormingVSI_PCS('ApparatusType',Type);
+        else
+            Apparatus = SimplusGT.Class.GridFormingVSI('ApparatusType',Type);
+        end
         Apparatus.Para = [ Para.wLf;
                         Para.Rf;
                         Para.wCf;

@@ -19,7 +19,7 @@
     "DiscretizationDampingFlag": 1,
     "DirectFeedthrough": 0,
     "PowerFlowAlgorithm": 1,
-    "EnableCreateSimulinkModel": 0,
+    "EnableCreateSimulinkModel": 1,
     "EnablePlotPole": 1,
     "EnablePlotAdmittance": 0,
     "EnablePrintOutput": 0
@@ -106,7 +106,7 @@
 {
 
       "BusNo": 2,
-      "Type": 20,
+      "Type": 21,
       "Para": 
 {
 

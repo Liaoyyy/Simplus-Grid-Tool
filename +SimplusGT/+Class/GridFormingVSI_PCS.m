@@ -37,7 +37,7 @@ classdef GridFormingVSI_PCS < SimplusGT.Class.ModelAdvance
         function [State,Input,Output] = SignalList(obj)
          	State  = {'i_bat', 'v_dc', 'i_bat_ref', 'duty_cycle','i_ld','i_lq','i_ld_i','i_lq_i','v_od','v_oq','v_od_i','v_oq_i','i_od','i_oq','v_d_ref','w','theta'};
             Input  = {'v_d','v_q','P0'};
-            Output = {'i_d','i_q','w','theta'};
+            Output = {'i_d','i_q','w','theta','v_dc','i_bat'};
         end
         
         % Calculate the equilibrium
@@ -284,7 +284,7 @@ classdef GridFormingVSI_PCS < SimplusGT.Class.ModelAdvance
                 
             elseif CallFlag == 2     
             % ### Call output equations: y = g(x,u)
-                g_xu = [i_od; i_oq; w; theta];
+                g_xu = [i_od; i_oq; w; theta;v_dc;i_bat];
                 Output = g_xu;
             end
             

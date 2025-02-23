@@ -21,8 +21,13 @@ for i = 1:N_Apparatus
         Pos_DS_Bus{i} = Pos_Apparatus{i} + Shift_DS_Bus;
         set_param(gcb,'position',[Pos_DS_Bus{i},Pos_DS_Bus{i}+Size_DS_Bus]);
         if ApparatusType{i}<=90
-            Output_DS_Bus = ['v_dq,i_dq,v_abc,i_abc,w,theta,pq'];
-            Length_D_Measurement = 7;
+            if ApparatusType{i} == 21
+                Output_DS_Bus = ['v_dq,i_dq,v_abc,i_abc,w,theta,pq,v_dc,i_bat'];
+                Length_D_Measurement = 9;
+            else
+                Output_DS_Bus = ['v_dq,i_dq,v_abc,i_abc,w,theta,pq'];
+                Length_D_Measurement = 7;
+            end
         elseif 1000<=ApparatusType{i} && ApparatusType{i}<=1090
             Output_DS_Bus = ['v,i,p'];
             Length_D_Measurement = 3;

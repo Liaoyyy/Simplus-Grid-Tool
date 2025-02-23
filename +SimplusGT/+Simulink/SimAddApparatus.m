@@ -29,14 +29,18 @@ for i = 1:N_Apparatus
                 Name_Apparatus{i} = ['VSI-PLL' num2str(Bus)];
                 FullName_Apparatus{i} = [Name_Model '/' Name_Apparatus{i}];
                 if ApparatusType{i}~=19
-                    add_block([Name_LibFile '/Grid-Following Voltage-Source Inverter (dq-Frame System Object)'],FullName_Apparatus{i});
+                    add_block([Name_LibFile '/PCS (dq-Frame System Object)'],FullName_Apparatus{i});
                 else
                     add_block([Name_LibFile '/Grid-Following Inverter (alpha/beta System Object)'],FullName_Apparatus{i});
                 end
             case 002
                 Name_Apparatus{i} = ['VSI-Droop' num2str(Bus)];
                 FullName_Apparatus{i} = [Name_Model '/' Name_Apparatus{i}];
-                add_block([Name_LibFile '/Grid-Forming Voltage-Source Inverter (dq-Frame System Object)'],FullName_Apparatus{i});
+                if ApparatusType{i}==21
+                    add_block([Name_LibFile '/PCS (dq-Frame System Object)'],FullName_Apparatus{i});
+                else
+                    add_block([Name_LibFile '/Grid-Forming Voltage-Source Inverter (dq-Frame System Object)'],FullName_Apparatus{i});
+                end
             case 009
             	Name_Apparatus{i} = ['Inf-Bus' num2str(Bus)];
                 FullName_Apparatus{i} = [Name_Model '/' Name_Apparatus{i}];
