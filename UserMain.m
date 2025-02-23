@@ -6,17 +6,18 @@
 % More manuals are available in the "Documentations" folder.
 
 %% Clear matlab
-clear all; clc; close all; 
+clear all; clc; %close all; 
 
 %% User data
-UserDataName = 'UserData';      % Default 4-bus system
+% UserDataName = 'UserData';      % Default 4-bus system
 
 % Example power systems in "Examples" folder:
 %
 % Ac power system examples:
 % UserDataName = 'SgInfiniteBus';               % Single synchronous generator and infinite bus
 % UserDataName = 'GflInverterInfiniteBus';   	% Single grid-following inverter and infinite bus
-% UserDataName = 'GfmInverterInfiniteBus';   	% Single grid-forming inverter and infinite bus
+%   UserDataName = 'GfmInverterInfiniteBus';   	% Single grid-forming inverter and infinite bus
+UserDataName = 'GfmInverterInfiniteBus';
 % UserDataName = 'IEEE_14Bus';
 % UserDataName = 'IEEE_30Bus';
 % UserDataName = 'IEEE_57Bus';
