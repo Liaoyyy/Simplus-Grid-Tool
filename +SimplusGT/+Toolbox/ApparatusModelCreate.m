@@ -80,7 +80,47 @@ switch floor(Type/10)
                         Para.fvdq;
                         Para.fidq;
                         Para.w0];
-                   
+    % ### Battery Energy Storage System
+    case 3 % Type 30-39
+        Apparatus = SimplusGT.Class.Battery('ApparatusType',Type);
+        Apparatus.Para = [ Para.wLf;
+                        Para.Rf;
+                        Para.wCf;
+                        Para.wLc;
+                        Para.Rc;
+                        Para.Xov;
+                        Para.Dw;
+                        Para.fdroop;
+                        Para.fvdq;
+                        Para.fidq;
+                        Para.w0;
+                        Para.L_dc;
+                        Para.C_dc;
+                        Para.v_ocv;
+                        Para.R_bat;
+                        Para.v_dc_ref
+                        Para.fvdc;
+                        Para.fibat];
+    case 4 % Type 40-49
+        Apparatus = SimplusGT.Class.Photovoltaic('ApparatusType',Type);
+        Apparatus.Para = [ Para.wLf;
+                        Para.Rf;
+                        Para.wCf;
+                        Para.wLc;
+                        Para.Rc;
+                        Para.Xov;
+                        Para.N;
+                        Para.R;
+                        Para.fvdq;
+                        Para.fidq;
+                        Para.w0;
+                        Para.Sair;
+                        Para.Tair;
+                        Para.C_dc;
+                        Para.v_pv_ref;
+                        Para.v_dc_ref
+                        Para.fvdc;
+                        Para.fidc];
     % ### Ac infinite bus
     case 9
         Apparatus = SimplusGT.Class.InfiniteBusAc;
@@ -124,7 +164,11 @@ switch floor(Type/10)
     % Interlinking apparatuses
     % =======================================
     case 200
-        Apparatus = SimplusGT.Class.InterlinkAcDc('ApparatusType',Type);
+        if Type == 2004
+            Apparatus = SimplusGT.Class.InterlinkAcDc('ApparatusType',Type);
+        else
+            Apparatus = SimplusGT.Class.InterlinkAcDc('ApparatusType',Type);
+        end
         Apparatus.Para = [ Para.C_dc;
                         Para.wL_ac;
                         Para.R_ac;
@@ -133,6 +177,10 @@ switch floor(Type/10)
                         Para.fidq;
                         Para.fvdc;
                         Para.fpll;
+                        Para.R;
+                        Para.K;
+                        Para.N;
+                        Para.v_dc_ref;
                         Para.w0];
     
     % ### Otherwise

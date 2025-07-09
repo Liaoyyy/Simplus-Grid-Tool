@@ -17,11 +17,16 @@ UserDataName = 'UserData';      % Default 4-bus system
 % UserDataName = 'SgInfiniteBus';               % Single synchronous generator and infinite bus
 % UserDataName = 'GflInverterInfiniteBus';   	% Single grid-following inverter and infinite bus
 % UserDataName = 'GfmInverterInfiniteBus';   	% Single grid-forming inverter and infinite bus
+% UserDataName = 'BessInfiniteBus';             % Single battery energy storage system and infinite bus
+% UserDataName = 'PVInfiniteBus';               % Single Photovoltaic and infinite bus
 % UserDataName = 'IEEE_14Bus';
 % UserDataName = 'IEEE_30Bus';
 % UserDataName = 'IEEE_57Bus';
 % UserDataName = 'AU14Gen_59Bus';
 % UserDataName = 'NETS_NYPS_68Bus';
+% UserDataName = 'BESS_Plant_10Bus';
+% UserDataName = 'PV_Plant_10Bus';
+% UserDataName = 'PV_BESS_Hybrid_Plant_10Bus';
 %
 % Dc power system examples:
 % UserDataName = 'GfdBuckInfiniteBus';         % Single grid-feeding buck converter and infinite bus

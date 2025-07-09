@@ -40,8 +40,8 @@
       "QGi": 0,
       "PLi": 0,
       "QLi": 0,
-      "Qmin": -1,
-      "Qmax": 1,
+      "Qmin": -999,
+      "Qmax": 999,
       "AreaNo": 1,
       "AcDc": 1
     
@@ -55,11 +55,11 @@
       "Voltage": 1,
       "Theta": 0,
       "PGi": 0,
-      "QGi": 0.0001,
+      "QGi": 0,
       "PLi": 0,
       "QLi": 0,
-      "Qmin": -1,
-      "Qmax": 1,
+      "Qmin": -999,
+      "Qmax": 999,
       "AreaNo": 1,
       "AcDc": 1
     
@@ -71,10 +71,10 @@
   "NetworkLine": 
 {
 
-    "FromBus": 1,
-    "ToBus": 2,
-    "R": 0.02,
-    "wL": 0.1,
+    "FromBus": 2,
+    "ToBus": 1,
+    "R": 0.1,
+    "wL": 0.5,
     "wC": 0,
     "G": 0,
     "TurnsRatio": 1
@@ -93,20 +93,7 @@
 {
 
       "BusNo": 1,
-      "Type": 90,
-      "Para": 
-[
-
-]
-
-    
-}
-,
-    
-{
-
-      "BusNo": 2,
-      "Type": 20,
+      "Type": 30,
       "Para": 
 {
 
@@ -115,14 +102,34 @@
         "wCf": 0.02,
         "wLc": 0.01,
         "Rc": 0.002,
-        "Xov": 0,
+        "Xov": 0.01,
         "Dw": 0.05,
         "fdroop": 5,
         "fvdq": 300,
         "fidq": 600,
-        "w0": 314.15926535897933
+        "w0": 314.15926535897933,
+        "L_dc": 0.000125,
+        "C_dc": 0.224,
+        "v_ocv": 0.625,
+        "R_bat": 0.0625,
+        "v_dc_ref": 1,
+        "fvdc": 50,
+        "fibat": 500
       
 }
+
+    
+}
+,
+    
+{
+
+      "BusNo": 2,
+      "Type": 90,
+      "Para": 
+[
+
+]
 
     
 }
