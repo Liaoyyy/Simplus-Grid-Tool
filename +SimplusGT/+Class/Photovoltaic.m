@@ -48,7 +48,6 @@ classdef Photovoltaic < SimplusGT.Class.ModelAdvance
             V	= obj.PowerFlow(3);
             xi	= obj.PowerFlow(4);
             w   = obj.PowerFlow(5);
-            
             % Get parameter
             xwLf    = obj.Para(1);
             Rf      = obj.Para(2);
@@ -57,20 +56,12 @@ classdef Photovoltaic < SimplusGT.Class.ModelAdvance
             Rc      = obj.Para(5);
             Xov     = obj.Para(6);
             Rov     = 0;
-            % xDw     = obj.Para(7);
-            % xfdroop = obj.Para(8);
-            % xfvdc   = obj.Para(9);
-            % xfidq   = obj.Para(10);
-            W0       = obj.Para(11);
-            % Sair       = obj.Para(12);
-            % Tair       = obj.Para(13);
-            % v_pv_ref = obj.Para(15);
-            % v_dc_ref = obj.Para(16);
-
-
-            %% Solar para
-            S_air       = 1000;
-            T_air       = 25;
+            W0      = obj.Para(11);
+            S_air   = obj.Para(12);
+            T_air   = obj.Para(13);
+            v_pv    = obj.Para(15);
+            v_o     = obj.Para(16);
+            % Solar para
             T_ref = 25;
             S_ref = 1000;
             I_sc  = 14.880;
@@ -108,23 +99,21 @@ classdef Photovoltaic < SimplusGT.Class.ModelAdvance
             
             i_d = real(i_dq);
             i_q = imag(i_dq);
-            i_di = -real(e_dq);         
-            i_qi = -imag(e_dq);
+            i_d_i = -real(e_dq);         
+            i_q_i = -imag(e_dq);
             v_d = real(v_dq);
             v_q = imag(v_dq);
-            v_di = -i_d;              
-            v_qi = -i_q;
+            v_d_i = -i_d;              
+            v_q_i = -i_q;
             i_gd = real(i_gdq);
             i_gq = imag(i_gdq);
             theta = xi;
-            
-            % dil       = (vpv-ed_dc-Rf_dc*il)/Lf_dc;
-            v_pv   = 0.8;
+
+            % dc
             i_pv = (( I_sc * (1-C1 * (exp((v_pv*800+dU)/C2/U_oc)-1)))+dI)/40;
             i_l    = i_pv;
             v_i    = i_l; 
             ed_dc = v_pv-i_l*Rf_dc;
-            v_o    = 1;
             i_i    = ed_dc;
 
             obj.P0 = P*(-1);
@@ -137,12 +126,10 @@ classdef Photovoltaic < SimplusGT.Class.ModelAdvance
             obj.v_oq_r = v_oq_r;
             
             % Get equilibrium
-            x_e = [v_i;i_i;i_l;v_pv;v_di;v_qi;i_di;i_qi;i_d;i_q;v_d;v_q;i_gd;i_gq;v_o;theta];
+            x_e = [v_i;i_i;i_l;v_pv;v_d_i;v_q_i;i_d_i;i_q_i;i_d;i_q;v_d;v_q;i_gd;i_gq;v_o;theta];
             u_e = [v_gd; v_gq; P];
         end
       
-
-
         % State space model
         function [Output] = StateSpaceEqu(obj,x,u,CallFlag)
             % Set the invertor control type
@@ -160,10 +147,10 @@ classdef Photovoltaic < SimplusGT.Class.ModelAdvance
             i_i    = x(2);
             i_l    = x(3);
             v_pv   = x(4);
-            v_di   = x(5);
-            v_qi   = x(6); 
-            i_di   = x(7);
-            i_qi   = x(8);
+            v_d_i   = x(5);
+            v_q_i   = x(6); 
+            i_d_i   = x(7);
+            i_q_i   = x(8);
             i_d    = x(9);
             i_q    = x(10);
             v_d    = x(11);
@@ -187,14 +174,15 @@ classdef Photovoltaic < SimplusGT.Class.ModelAdvance
             xfidq   = obj.Para(10);
             W0      = obj.Para(11);
             w0      = W0 ; 
-            S_air    = obj.Para(12);
-            T_air    = obj.Para(13);
+            S_air   = obj.Para(12);
+            T_air   = obj.Para(13);
             Co      = obj.Para(14); 
             vr      = obj.Para(15);
+            V_dc    = obj.Para(16);
             xfvdc   = obj.Para(17);
             xfidc   = obj.Para(18);
 
-            %% Solar para
+            % Solar para
             T_ref = 25;
             S_ref = 1000;
             I_sc  = 14.880;
@@ -261,38 +249,35 @@ classdef Photovoltaic < SimplusGT.Class.ModelAdvance
 
                 if Control_type ==1
                     % AC voltage control
-                    error_vd = v_dr - v_d; %- (igd*Rov-igq*Xov) * (-1);
-              	    error_vq = v_qr - v_q; %- (igq*Rov+igd*Xov) * (-1);
-                    i_d_r = -(error_vd*kpv1 + v_di);
-                    i_q_r = -(error_vq*kpv1 + v_qi);
-                    
-                    dv_di = error_vd*kiv1;
-                    dv_qi = error_vq*kiv1;
+                    error_vd = v_dr - v_d- (i_gd*Rov-i_gq*Xov) * (-1);
+              	    error_vq = v_qr - v_q- (i_gq*Rov+i_gd*Xov) * (-1);
+                    i_d_r = -(error_vd*kpv1 + v_d_i);
+                    i_q_r = -(error_vq*kpv1 + v_q_i);
+                    dv_d_i = error_vd*kiv1;
+                    dv_q_i = error_vq*kiv1;
     
                     % AC current control
                     error_id = i_d_r-i_d;
                     error_iq = i_q_r-i_q;
-                    e_d = -(error_id*kpi1 + i_di);
-                    e_q = -(error_iq*kpi1 + i_qi);
-                    di_di = error_id*kii1;            
-                    di_qi = error_iq*kii1;
+                    e_d = -(error_id*kpi1 + i_d_i);
+                    e_q = -(error_iq*kpi1 + i_q_i);
+                    di_d_i = error_id*kii1;            
+                    di_q_i = error_iq*kii1;
                 else
-                    dv_di = 0;
-                    dv_qi = 0;
-                    di_di = 0;
-                    di_qi = 0;
+                    dv_d_i = 0;
+                    dv_q_i = 0;
+                    di_d_i = 0;
+                    di_q_i = 0;
                     e_d   =v_dr;
                     e_q   =v_qr;
                 end
 
-                
                 Pr = i_l * ed_dc;
                 p  = (e_d*i_d + e_q*i_q)*(-1);
-                w = ((Pr - p)/v_o*R1 + (v_o-1))*N1*W0+w0; 
+                w = ((Pr - p)/v_o*R1 + (v_o-V_dc))*N1*W0+w0; 
 
                 % dtheta = w-W0;
                 dtheta = w;
-
                 dv_o = (Pr-p)/v_o/Co; 
 
                 % Lf equation
@@ -314,7 +299,7 @@ classdef Photovoltaic < SimplusGT.Class.ModelAdvance
                 di_gq = (vgq - v_q - Rc*i_gq - w*Lc*i_gd)/Lc;
                 
                 % dx
-                f_xu = [dv_i; di_i; di_l; dv_pv; dv_di; dv_qi; di_di; di_qi; di_d; di_q; dv_d; dv_q; di_gd; di_gq; dv_o; dtheta];
+                f_xu = [dv_i; di_i; di_l; dv_pv; dv_d_i; dv_q_i; di_d_i; di_q_i; di_d; di_q; dv_d; dv_q; di_gd; di_gq; dv_o; dtheta];
                 Output = f_xu;
                 
             elseif CallFlag == 2    
@@ -327,23 +312,22 @@ classdef Photovoltaic < SimplusGT.Class.ModelAdvance
                 v_dr = obj.v_od_r;
                 v_qr = obj.v_oq_r;
                 
-                 if Controll_type ==1
+                if Control_type ==1
                     % AC voltage control
-                    error_vd = v_dr - v_d; %- (igd*Rov-igq*Xov) * (-1);
-              	    error_vq = v_qr - v_q; %- (igq*Rov+igd*Xov) * (-1);
-                    i_d_r = -(error_vd*kpv1 + v_di);
-                    i_q_r = -(error_vq*kpv1 + v_qi);
+                    error_vd = v_dr - v_d- (i_gd*Rov-i_gq*Xov) * (-1);
+              	    error_vq = v_qr - v_q- (i_gq*Rov+i_gd*Xov) * (-1);
+                    i_d_r = -(error_vd*kpv1 + v_d_i);
+                    i_q_r = -(error_vq*kpv1 + v_q_i);
                     
-    
                     % AC current control
                     error_id = i_d_r-i_d;
                     error_iq = i_q_r-i_q;
-                    e_d = -(error_id*kpi1 + i_di);
-                    e_q = -(error_iq*kpi1 + i_qi);
-                 else
+                    e_d = -(error_id*kpi1 + i_d_i);
+                    e_q = -(error_iq*kpi1 + i_q_i);
+                else
                     e_d   = v_dr;
                     e_q   = v_qr;
-                 end
+                end
 
                 % end
                 Pr = i_l * ed_dc;
