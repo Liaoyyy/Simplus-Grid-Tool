@@ -164,11 +164,7 @@ switch floor(Type/10)
     % Interlinking apparatuses
     % =======================================
     case 200
-        if Type == 2004
-            Apparatus = SimplusGT.Class.InterlinkAcDc('ApparatusType',Type);
-        else
-            Apparatus = SimplusGT.Class.InterlinkAcDc('ApparatusType',Type);
-        end
+        Apparatus = SimplusGT.Class.InterlinkAcDc('ApparatusType',Type);
         Apparatus.Para = [ Para.C_dc;
                         Para.wL_ac;
                         Para.R_ac;
